@@ -8,3 +8,7 @@ Route::get('/', function () {
 });
 
 Route::get('/items', Items::class);
+
+Route::fallback(function () {
+    return view('not-found');
+});
