@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
-use App\Livewire\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +23,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/item', ItemController::class)->name('item');
+    Route::get('/item', App\Livewire\ItemController::class)->name('item');
+    Route::resource('/item/v2', App\Http\Controllers\ItemController::class);
    
     Route::get('/utility/404', function () {
         return view('pages/utility/404');

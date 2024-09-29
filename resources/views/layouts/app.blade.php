@@ -45,7 +45,6 @@
 
         <!-- Page wrapper -->
         <div class="flex h-[100dvh] overflow-hidden">
-
             <x-app.sidebar :variant="$attributes['sidebarVariant']" />
 
             <!-- Content area -->
