@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\category;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Item extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name', 
-        'stock', 
-        'price'
-    ];
+    protected $fillable = ['name', 'stock', 'price', 'category_id'];
     protected static function boot()
     {
         parent::boot();
@@ -30,5 +28,9 @@ class Item extends Model
         static::deleted(function ($item) {
             Log::channel('item-log')->info('dihapus', ['id' => $item->id, 'nama' => $item->name,'tanggal' => now()->format('d-m-Y H:i')]);
         });
+    }
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(category::class);
     }
 }
