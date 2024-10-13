@@ -24,14 +24,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::resource('/item/v2', App\Http\Controllers\ItemController::class);
-    Route::middleware('role:admin')->group(function () {});
-    Route::get('/item', App\Livewire\ItemController::class)->name('item');
-    Route::get('/orders', Orders::class)->name('orders.index');
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/item', App\Livewire\ItemController::class)->name('item');
+        Route::get('/orders', Orders::class)->name('orders.index');
+        Route::get('/orders/{orderId}', OrderDetails::class)->name('orders.show');
+    });
+
     Route::get('/orders/create', OrderForm::class)->name('orders.create');
-    Route::get('/orders/{orderId}', OrderDetails::class)->name('orders.show');
-    Route::get('/utility/404', function () {
-        return view('pages/utility/404');
-    })->name('404');
+    
 
     Route::fallback(function () {
         return view('pages/utility/404');
