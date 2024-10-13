@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
+use App\Livewire\OrderForm;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +23,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::resource('/item/v2', App\Http\Controllers\ItemController::class);
     Route::middleware('role:admin')->group(function () {
-        Route::get('/item', App\Livewire\ItemController::class)->name('item');
     });
-    
+    Route::get('/item', App\Livewire\ItemController::class)->name('item');
+    Route::get('/orders/create', OrderForm::class)->name('orders.create');
     Route::get('/utility/404', function () {
         return view('pages/utility/404');
     })->name('404');

@@ -13,6 +13,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
         <!-- <script src="https://cdn.tailwindcss.com"></script> -->
         <!-- Scripts -->
+        <script src="//unpkg.com/alpinejs" defer></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->
