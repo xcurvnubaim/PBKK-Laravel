@@ -17,15 +17,14 @@ use App\Http\Controllers\DashboardController;
 
 Route::redirect('/', 'login');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-
-    // Route for the getting the data feed
-    Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
+Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/item', App\Livewire\ItemController::class)->name('item');
-    Route::resource('/item/v2', App\Http\Controllers\ItemController::class);
-   
+    // Route::resource('/item/v2', App\Http\Controllers\ItemController::class);
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/item', App\Livewire\ItemController::class)->name('item');
+    });
+    
     Route::get('/utility/404', function () {
         return view('pages/utility/404');
     })->name('404');
