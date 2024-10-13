@@ -17,7 +17,28 @@
         </div>
     </div>
     @endif
-
+    
+    @if (session()->has('errorMessage'))
+    <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-md">
+        <div class="bg-red-500 rounded-lg shadow-lg w-80">
+            <div class="p-6 text-center">
+                <div class="flex justify-center mb-4">
+                    <div class="bg-white rounded-full p-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="text-white
+                font-semibold text-lg">ERROR</h2>
+                <p class="text-white
+                my-2">{{ session('errorMessage') }}</p>
+                <a href="{{ route('orders.create') }}" class="mt-4 bg-white text-red-500 rounded-full px-4 py-2">Continue</a>
+            </div>
+        </div>
+    </div>
+    @endif
+    
     <div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-2xl font-semibold mb-4">Create Order</h1>
 

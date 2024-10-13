@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Item;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class OrderForm extends Component
@@ -56,39 +57,51 @@ class OrderForm extends Component
 
     public function store()
     {
-        $this->validate([
-            'customer_name' => 'required',
-            'order_date' => 'required|date',
-            'details.*.item_id' => 'required|exists:items,id',
-            'details.*.quantity' => 'required|numeric|min:1',
-        ]);
+        try {
+            DB::beginTransaction();
+            $this->validate([
+                'customer_name' => 'required',
+                'order_date' => 'required|date',
+                'details.*.item_id' => 'required|exists:items,id',
+                'details.*.quantity' => 'required|numeric|min:1',
+            ]);
 
-        $order = Order::create([
-            'customer_name' => $this->customer_name,
-            'order_date' => $this->order_date,
-            'total_amount' => $this->total_amount,
-            'staff_id' => Auth::user()->id,
-        ]);
+            $order = Order::create([
+                'customer_name' => $this->customer_name,
+                'order_date' => $this->order_date,
+                'total_amount' => $this->total_amount,
+                'staff_id' => Auth::user()->id,
+            ]);
 
-        $details = [];
-        foreach ($this->details as $detail) {
-            if (!empty($detail['item_id'])) {
-                $details[] = [
-                    'order_id' => $order->id,
-                    'item_id' => $detail['item_id'],
-                    'quantity' => $detail['quantity'],
-                    'price' => Item::find($detail['item_id'])->price,
-                ];
+            $details = [];
+            foreach ($this->details as $detail) {
+                if (!empty($detail['item_id'])) {
+                    $details[] = [
+                        'order_id' => $order->id,
+                        'item_id' => $detail['item_id'],
+                        'quantity' => $detail['quantity'],
+                        'price' => Item::find($detail['item_id'])->price,
+                    ];
+                }
+
+                Item::find($detail['item_id'])->decrement('stock', $detail['quantity']);
             }
+
+            $order->orderDetails()->createMany($details);
+
+            // Flash success message and redirect
+            session()->flash('successMessage', 'Order created successfully.');
+
+            DB::commit();
+            // Redirect to the same page to refresh
+            return redirect()->route('orders.create');
+        } catch (\Exception $e) {
+            // Flash error message and redirect
+            session()->flash('errorMessage', 'Failed to create order.');
+            DB::rollBack();
+            // Redirect to the same page to refresh
+            return redirect()->route('orders.create');
         }
-
-        $order->orderDetails()->createMany($details);
-
-        // Flash success message and redirect
-        session()->flash('successMessage', 'Order created successfully.');
-
-        // Redirect to the same page to refresh
-        return redirect()->route('orders.create');
     }
 
     public function resetForm()
