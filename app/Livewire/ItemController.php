@@ -7,13 +7,15 @@ use Livewire\Component;
 
 class ItemController extends Component
 {
-    public $items, $itemId, $name, $stock, $price;
+    public $itemId, $name, $stock, $price;
     public bool $isOpen = false;
 
     public function render()
     {
-        $this->items = Item::all();
-        return view('livewire.items.items');
+        // Fetch paginated items directly in the render method
+        return view('livewire.items.items', [
+            'items' => Item::paginate(10), // Fetch the items here
+        ]);
     }
 
     public function create()

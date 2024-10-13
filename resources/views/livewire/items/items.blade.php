@@ -27,7 +27,7 @@
         <tbody>
             @foreach($items as $index => $item)
             <tr>
-                <td class="border dark:border-gray-500 text-center px-4 py-2 dark:text-white">{{ $index + 1 }}</td>
+                <td class="border dark:border-gray-500 text-center px-4 py-2 dark:text-white">{{ $items->firstItem() + $index }}</td>
                 <td class="border dark:border-gray-500 text-start px-4 py-2 dark:text-white">{{ $item->name }}</td>
                 <td class="border dark:border-gray-500 text-center px-4 py-2 dark:text-white">{{ $item->stock }}</td>
                 <td class="border dark:border-gray-500 px-4 py-2 dark:text-white">
@@ -44,4 +44,9 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Pagination Links -->
+    <div class="mt-4">
+        {{ $items->links() }} <!-- This will generate the pagination links -->
+    </div>
 </div>

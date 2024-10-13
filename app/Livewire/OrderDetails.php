@@ -15,7 +15,7 @@ class OrderDetails extends Component
     {
         $this->orderId = $orderId;
         $this->order = Order::with('orderdetails.item')->find($orderId); // Load order with its details and items
-        $this->staffName = $this->order->staff->name; // Get the staff name
+        $this->staffName = $this->order?->staff->name; // Get the staff name
     }
 
     public function render()
