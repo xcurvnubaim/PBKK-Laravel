@@ -5,18 +5,19 @@ namespace App\Livewire;
 use App\Models\Item;
 use Livewire\Component;
 use App\Models\category;
+use Livewire\WithPagination;
 
 class ItemController extends Component
 {
-    public $items, $itemId, $name, $stock, $price, $category, $categoryId;
+    use WithPagination;
+    public $itemId, $name, $stock, $price, $category, $categoryId;
     public bool $isOpen = false;
 
     public function render()
     {
         // Fetch paginated items directly in the render method
-        return view('livewire.items.items', [
-            'items' => Item::paginate(10), // Fetch the items here
-        ]);
+        $items = Item::with('category')->paginate(10);
+        return view('livewire.items.items', ['items' => $items]);
     }
 
     public function create()

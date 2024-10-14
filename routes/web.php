@@ -22,16 +22,15 @@ Route::redirect('/', 'login');
 Route::get('/logs', function () {
     $data = [];
     // Ambil isi log dari file
-    $logContents = file(storage_path('logs\item_activity.log'));
+    $logContents = file(storage_path('logs/item_activity.log'));
     foreach($logContents as $index=>$lines){
         if (!empty($lines)) {
             $logEntry = json_decode($lines,true); // true untuk mengembalikan array asosiatif
             $data[$index] = $logEntry;
         }
     }
-    // dd($data);
-    // dd($data);
-    return view('livewire\items\items-log', ['logs' =>($data)]);
+
+    return view('livewire.items.items-log', ['logs' =>($data)]);
 })->name('item-log');
 
 Route::middleware(['auth:sanctum'])->group(function () {
