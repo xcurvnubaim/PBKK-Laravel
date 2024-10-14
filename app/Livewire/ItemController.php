@@ -57,22 +57,22 @@ class ItemController extends Component
 
         // Coba cari kategori yang sudah ada berdasarkan nama (case-insensitive)
         $existingCategory = Category::where('category_name', strtolower($this->category))->first();
-
-        if ($existingCategory) {
-            // Jika kategori ditemukan, ambil ID-nya
-            $categoryId = $existingCategory->id;
-        } else {
-            // Jika tidak ditemukan, hapus kategori yang ada sebelumnya (jika ada)
-            if (isset($this->categoryId)) {
-                $oldCategory = Category::find($this->categoryId);
-                if ($oldCategory) {
-                    $oldCategory->delete(); // Hapus kategori lama
-                }
-            }
-            // Buat kategori baru
-            $newCategory = Category::create(['category_name' => $this->category]);
-            $categoryId = $newCategory->id; // Ambil ID kategori baru
-        }
+        $categoryId = $existingCategory ? $existingCategory->id : null;
+        // if ($existingCategory) {
+        //     // Jika kategori ditemukan, ambil ID-nya
+        //     $categoryId = $existingCategory->id;
+        // } else {
+        //     // Jika tidak ditemukan, hapus kategori yang ada sebelumnya (jika ada)
+        //     if (isset($this->categoryId)) {
+        //         $oldCategory = Category::find($this->categoryId);
+        //         if ($oldCategory) {
+        //             $oldCategory->delete(); // Hapus kategori lama
+        //         }
+        //     }
+        //     // Buat kategori baru
+        //     $newCategory = Category::create(['category_name' => $this->category]);
+        //     $categoryId = $newCategory->id; // Ambil ID kategori baru
+        // }   
 
         // Buat atau perbarui item dengan menyertakan category_id
         Item::updateOrCreate(
