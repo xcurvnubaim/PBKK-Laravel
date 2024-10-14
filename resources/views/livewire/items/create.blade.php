@@ -29,7 +29,7 @@
                         <select id="category" wire:model="category" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <option value="">Select a category</option>
                             @foreach($categories as $cat)
-                            <option value="{{ $cat['id'] }}">{{ $cat['category_name'] }}</option>
+                            <option value="{{ $cat['category_name'] }}">{{ $cat['category_name'] }}</option>
                             @endforeach
                         </select>
                         @error('category') <span class="text-red-500">{{ $message }}</span>@enderror
