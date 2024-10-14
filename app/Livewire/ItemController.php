@@ -17,7 +17,8 @@ class ItemController extends Component
     {
         // Fetch paginated items directly in the render method
         $items = Item::with('category')->paginate(10);
-        return view('livewire.items.items', ['items' => $items]);
+        $categories = Category::all();
+        return view('livewire.items.items', ['items' => $items, 'categories' => $categories]);
     }
 
     public function create()
