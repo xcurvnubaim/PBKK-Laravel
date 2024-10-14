@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\DataFeed;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $dataFeed = new DataFeed();
+        if(Auth::user()->role === 'cashier') {
+            return redirect()->route('orders.create');
+        }
 
-        return view('pages/dashboard/dashboard', compact('dataFeed'));
+        return view('pages/dashboard/dashboard');
     }
 
     /**
@@ -19,18 +20,4 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function analytics()
-    {
-        return view('pages/dashboard/analytics');
-    }
-
-    /**
-     * Displays the fintech screen
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function fintech()
-    {
-        return view('pages/dashboard/fintech');
-    }
 }

@@ -23,6 +23,11 @@
             <input type="number" name="price" id="price" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ $item->price }}" required>
         </div>
 
+        <div class="mb-4">
+            <label for="category" class="block text-sm font-medium text-gray-700">category</label>
+            <input type="number" name="category" id="category" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ $item->category->category_name }}" required>
+        </div>
+
         <button type="submit" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500">Update</button>
     </form>
 </div>

@@ -21,21 +21,22 @@
                 <th class="dark:border-gray-500 px-4 py-2">Item Name</th>
                 <th class="dark:border-gray-500 px-4 py-2">Item Stok</th>
                 <th class="dark:border-gray-500 px-4 py-2">Item Price</th>
+                <th class="dark:border-gray-500 px-4 py-2">Category</th>
                 <th class="dark:border-gray-500 px-4 py-2">Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($items as $index => $item)
             <tr>
-                <td class="border dark:border-gray-500 text-center px-4 py-2 dark:text-white">{{ $index + 1 }}</td>
+                <td class="border dark:border-gray-500 text-center px-4 py-2 dark:text-white">{{ $items->firstItem() + $index }}</td>
                 <td class="border dark:border-gray-500 text-start px-4 py-2 dark:text-white">{{ $item->name }}</td>
                 <td class="border dark:border-gray-500 text-center px-4 py-2 dark:text-white">{{ $item->stock }}</td>
                 <td class="border dark:border-gray-500 px-4 py-2 dark:text-white">
-                    <div class="flex justify-between">
-                        <span>Rp</span>
-                        <span>{{ number_format($item->price, 0, ',', '.') }}</span>
+                    <div class="flex justify-center">
+                        <span>Rp.{{ number_format($item->price, 0, ',', '.') }}</span>
                     </div>
                 </td>
+                <td class="border dark:border-gray-500 text-center px-4 py-2 dark:text-white">{{ $item->category->category_name }}</td>
                 <td class="border dark:border-gray-500 text-center py-2 gap-4 flex justify-center">
                     <button wire:click="edit({{ $item->id }})" class="btn bg-blue-600 text-white px-3 py-2 rounded-md">Edit</button>
                     <button wire:click="delete({{ $item->id }})" class="btn bg-red-600 text-white px-3 py-2 rounded-md">Delete</button>
@@ -44,4 +45,9 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Pagination Links -->
+    <div class="mt-4">
+        {{ $items->links() }} <!-- This will generate the pagination links -->
+    </div>
 </div>
