@@ -25,8 +25,13 @@
                         @error('price') <span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                     <div class="mb-4">
-                        <label for="category" class="block text-gray-700 text-sm font-bold mb-2">category:</label>
-                        <input type="text" id="category" wire:model="category" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></input>
+                        <label for="category" class="block text-gray-700 text-sm font-bold mb-2">Category:</label>
+                        <select id="category" wire:model="category" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="">Select a category</option>
+                            @foreach($categories as $cat)
+                            <option value="{{ $cat['id'] }}">{{ $cat['category_name'] }}</option>
+                            @endforeach
+                        </select>
                         @error('category') <span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                 </div>
