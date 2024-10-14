@@ -2,6 +2,7 @@
 
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
@@ -125,6 +126,12 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+        'item-log' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/item_activity.log'),
+            'level' => 'debug',
+            'formatter' => JsonFormatter::class,
         ],
     ],
 

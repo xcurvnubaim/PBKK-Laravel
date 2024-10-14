@@ -4,10 +4,11 @@ namespace App\Livewire;
 
 use App\Models\Item;
 use Livewire\Component;
+use App\Models\category;
 
 class ItemController extends Component
 {
-    public $itemId, $name, $stock, $price;
+    public $items, $itemId, $name, $stock, $price, $category, $categoryId;
     public bool $isOpen = false;
 
     public function render()
@@ -39,27 +40,59 @@ class ItemController extends Component
         $this->name = '';
         $this->stock = '';
         $this->price = '';
+        $this->category = '';
     }
     
     public function store()
     {
+        // Validasi input
         $this->validate([
             'name' => 'required',
-            'stock' => 'required',
-            'price' => 'required',
+            'stock' => 'required|integer',
+            'price' => 'required|numeric',
+            'category' => 'required|string' // Validasi kategori sebagai string
         ]);
 
-        Item::updateOrCreate(['id' => $this->itemId], [
-            'name' => $this->name,
-            'stock' => $this->stock,
-            'price' => $this->price
-        ]);
+        // Coba cari kategori yang sudah ada berdasarkan nama (case-insensitive)
+        $existingCategory = Category::where('category_name', strtolower($this->category))->first();
 
+        if ($existingCategory) {
+            // Jika kategori ditemukan, ambil ID-nya
+            $categoryId = $existingCategory->id;
+        } else {
+            // Jika tidak ditemukan, hapus kategori yang ada sebelumnya (jika ada)
+            if (isset($this->categoryId)) {
+                $oldCategory = Category::find($this->categoryId);
+                if ($oldCategory) {
+                    $oldCategory->delete(); // Hapus kategori lama
+                }
+            }
+            // Buat kategori baru
+            $newCategory = Category::create(['category_name' => $this->category]);
+            $categoryId = $newCategory->id; // Ambil ID kategori baru
+        }
+
+        // Buat atau perbarui item dengan menyertakan category_id
+        Item::updateOrCreate(
+            ['id' => $this->itemId], // Untuk update jika ada ID, atau create jika tidak ada
+            [
+                'name' => $this->name,
+                'stock' => $this->stock,
+                'price' => $this->price,
+                'category_id' => $categoryId // Masukkan ID kategori yang sudah ada atau baru dibuat
+            ]
+        );
+
+        // Set pesan flash dan tutup modal
         session()->flash('message', $this->itemId ? 'Item Updated Successfully.' : 'Item Created Successfully.');
 
         $this->closeModal();
         $this->resetInputFields();
     }
+
+
+
+
 
     public function edit($id)
     {
