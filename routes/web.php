@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\logController;
 use App\Livewire\OrderDetails;
 use App\Livewire\OrderForm;
 use App\Livewire\Orders;
@@ -19,31 +20,19 @@ use App\Livewire\Orders;
 */
 
 Route::redirect('/', 'login');
-Route::get('/logs', function () {
-    $data = [];
-    // Ambil isi log dari file
-    $logContents = file(storage_path('logs/item_activity.log'));
-    foreach($logContents as $index=>$lines){
-        if (!empty($lines)) {
-            $logEntry = json_decode($lines,true); // true untuk mengembalikan array asosiatif
-            $data[$index] = $logEntry;
-        }
-    }
-
-    return view('livewire.items.items-log', ['logs' =>($data)]);
-})->name('item-log');
 
 Route::middleware(['auth:sanctum'])->group(function () {
-
+    
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/orders/create', OrderForm::class)->name('orders.create');
-
+    
     Route::middleware('role:admin')->group(function () {
         Route::get('/item', App\Livewire\ItemController::class)->name('item');
         Route::get('/orders', Orders::class)->name('orders.index');
         Route::get('/orders/{orderId}', OrderDetails::class)->name('orders.show');
+        Route::get('/logs', [logController::class, 'index'])->name('item-log');
     });
-
+    
     
 
     Route::fallback(function () {
